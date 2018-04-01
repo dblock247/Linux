@@ -108,87 +108,106 @@ alias tpa='cd /D/GIT/tpa/'
 alias tnet='cd /D/GIT/tpa/tpa-tnet/'
 alias tour='cd /D/GIT/tpa/tpa-tourconnect/'
 alias ssrs='cd /D/GIT/tpa/tpa-ssrs-reports/'
+alias ssis='cd /D/GIT/tpa/tpa-csa-file-handler/'
 alias rmz='cd /D/GIT/rmz/'
 alias rmzint='cd /D/GIT/rmz/rmz-intranet'
 alias rmzweb='cd /D/GIT/rmz/rmz-public-website'
+alias big='cd /D/Git/big/big-fincen'
 
-# Git Shortcuts
-alias a='git add'
-alias ap='git add -p'
-
-alias s='git status -s'
-alias co='git checkout'
-alias cob='git checkout -b'
-alias sync='git push -u'
-
-alias c='git commit -v'
-alias cm='git commit -m'
-alias ca='git commit -av'
-alias m='git commit --amend -verbose'
-
-alias b="git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
-alias br='git branch'
-alias bra='git branch -a'
-
-alias unstage='git reset HEAD -- '
-alias last='git log -1 HEAD'
-alias reset='git reset --hard'
-
-# alias gl='git log --oneline --decorate --graph --all'
-# alias gl='git log --pretty=format:"%C(yellow)%h %C(green)%ad%Cred%d %Creset%s%C(yellow) [%cn]" --decorate --date=short'
-alias glg='git log --pretty=format:"%C(yellow)%h %ad%Cred%d %Creset%s%Cblue [%cn]" --decorate --date=short'
-# alias log='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
-alias log='git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
-alias logd='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset" --abbrev-commit --date=short'
-#alias glg='git log --pretty=format:"%C(yellow)%h %ad%Cred%d %Creset%s%Cblue [%cn]" --decorate --date=short'
-alias gll='git log --pretty=format:"%C(yellow)%h%Cred%d %Creset%s%Cblue [%cn]" --decorate --numstat'
-alias rl='git reflog --format="%C(auto)%h %<|(20)%gd %C(blue)%cr%C(reset) %gs (%s)"'
-
-
-alias d='git diff'
-alias ds='git diff --stat'
-alias dc='git diff --cached'
-
-alias dt='git difftool'
-
-alias f='git fetch'
-alias ps='git push'
-alias pl='git pull'
-alias merge='git merge'
-
-# quick commands
-alias e='vim'
-alias o='start .'
-alias kill='kill -9'
-alias close='kill -15'
-# alias tails='tail -f /Applications/MAMP/logs/apache_error.log'
-alias ebash='vim ~/.bashrc'
-alias rebash='. ~/.bashrc'
-alias ealias='vim ~/.bash_aliases'
-alias stash='git stash'
-# alias ehosts='sudo mvim /etc/hosts'
-# alias tmamp='tail -f /Applications/MAMP/logs/*';
-# alias tache='tail -f /var/log/apache2/*';
-alias vimrc='vim ~/.vimrc'
-alias gvimrc='vim ~/.gvimrc'
-# alias rmlogs="sudo rm -f /private/var/log/asl/*.asl"
-# alias ephp="sudo vim /etc/php.ini"
-# alias apr="sudo apachectl restart"
-# alias iphone="open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app"
 
 # This PS1 snippet was adopted from code for MAC/BSD I saw from: http://allancraig.net/index.php?option=com_content&view=article&id=108:ps1-export-command-for-git&catid=45:general&Itemid=96
 # I tweaked it to work on UBUNTU 11.04 & 11.10 plus made it mo' better
 export PS1=$IBlack$Time12h$Color_Off'$(git branch &>/dev/null;\
-if [ $? -eq 0 ]; then \
-  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
-  if [ "$?" -eq "0" ]; then \
-    # @4 - Clean repository - nothing to commit
+	if [ $? -eq 0 ]; then \
+		  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
+		    if [ "$?" -eq "0" ]; then \
+			        # @4 - Clean repository - nothing to commit
     echo "'$Green'"$(__git_ps1 " (%s)"); \
-  else \
-    # @5 - Changes to working tree
-    echo "'$IRed'"$(__git_ps1 " {%s}"); \
-  fi) '$BYellow$PathShort$Color_Off'\$ "; \
-else \
-  # @2 - Prompt when not in GIT repo
-  echo " '$Yellow$PathShort$Color_Off'\$ "; \
-fi)'
+	      else \
+		          # @5 - Changes to working tree
+        echo "'$IRed'"$(__git_ps1 " {%s}"); \
+		  fi) '$BYellow$PathShort$Color_Off'\$ "; \
+		  else \
+			    # @2 - Prompt when not in GIT repo
+	  echo " '$Yellow$PathShort$Color_Off'\$ "; \
+		  fi)'
+
+# New commands testing
+# shell settings
+export HISTSIZE=1000000
+bind "set show-all-if-ambiguous On"
+
+# shell prompt
+#export PS1=$'\[\e[90m\]$PWD\[\e[0m\]\n\[\e[32m\]\u@\h\[\e[0m\]$ '
+
+# ls when changing directory
+cd() {
+  builtin cd "$@" && ls
+}
+
+# get the current branch name
+git_current_branch() {
+  cat "$(git rev-parse --git-dir 2>/dev/null)/HEAD" | sed -e 's/^.*refs\/heads\///'
+}
+
+# general aliases
+alias ls='ls --color=auto'
+alias du='du -k --max-depth=1 $argv'
+alias df='df -kh $argv'
+alias l='ls'
+alias ll='ls -lh'
+alias la='ls -a'
+alias lal='ls -lah'
+alias less='less -R'
+alias b='bundle exec'
+alias o='start .'
+
+# git aliases
+alias s='git status -sb'
+alias d='gd $argv'
+alias ga='git add -A'
+alias gap='ga -p'
+alias gau='git add -u'
+alias gbr='git branch -v'
+alias gc='git commit -v'
+alias gca='git commit -v -a'
+alias gcam='gca --amend'
+alias gch='git cherry-pick'
+alias gcf='git clean -f'
+alias gcm='git commit -v --amend'
+alias gco='git checkout'
+alias gcob='git checkout -b'
+alias gcop='gco -p'
+alias gd='git diff -M'
+alias gd.='git diff -M --color-words="."'
+alias gdw='git diff -M --color-words="\w+"'
+alias gdc='git diff --cached -M'
+alias gdc.='git diff --cached -M --color-words="."'
+alias gdcw='git diff --cached -M --color-words="\w+"'
+alias gf='git fetch --tags --prune'
+alias glog='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(dim white) %an, %ar%Creset"'
+alias gl='glog --graph'
+alias gla='gl --all'
+alias glo='gl HEAD origin/$(git_current_branch)'
+alias gm='git merge --no-ff'
+alias gmf='git merge --ff-only'
+alias gmfthis='gmf origin/$(git_current_branch)'
+alias gpl='git pull'
+alias gps='git push'
+alias gpthis='gp origin $(git_current_branch):$(git_current_branch)'
+alias gpthis!='gp --set-upstream origin $(git_current_branch):$(git_current_branch)'
+alias gr='git reset'
+alias grb='git rebase -p'
+alias grbthis='grb origin/$(git_current_branch)'
+alias grbc='git rebase --continue'
+alias grbi='git rebase -i'
+alias grh='git reset --hard'
+alias grhthis='grh origin/$(git_current_branch)'
+alias grp='gr --patch'
+alias grsh='git reset --soft HEAD~'
+alias grv='git remote -v'
+alias gs='git show -M'
+alias gs.='git show -M --color-words="."'
+alias gsw='git show -M --color-words="\w+"'
+alias gst='git stash'
+alias gstp='git stash pop'
